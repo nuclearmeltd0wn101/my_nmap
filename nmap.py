@@ -130,19 +130,19 @@ def main():
 
     print(f"Scanning {args.host} {'' if ip == args.host else f'({ip})'}..")
 
-    pool = Pool(args.processes)
     scanner = Scanner(ip, args.timeout)
 
     if args.tcp:
-        scan = pool.map(scanner.tcp, range(
+        pool = Pool(args.processes)
+        result = pool.map(scanner.tcp, range(
             args.start_port, args.end_port + 1))
-        for port, proto in scan:
+        for port, proto in result:
             if proto:
                 print(f'Open {port}/tcp, proto: {proto}')
     if args.udp:
-        scan = map(scanner.udp, range(
+        result = map(scanner.udp, range(
             args.start_port, args.end_port + 1))
-        for port, proto in scan:
+        for port, proto in result:
             if proto:
                 print(f'Open {port}/udp, proto: {proto}')
 
